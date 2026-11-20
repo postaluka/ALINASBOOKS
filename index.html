@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alina's books</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800&family=Oswald:wght@500;700&family=Literata:ital,opsz,wght@0,7..72,600;1,7..72,500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a design-bookshop catalogue — white, black, quiet; the books bring all the colour.
+   IDEA: a real shelf seen straight on: spines of different heights, widths and lettering.
+   PICTURE: the shelves themselves; hover pulls a spine out to its cover, click opens the book's page.
+   COLOUR and TYPE: white paper, black ink and rules; heavy Onest logo and UI; spines mix Onest, Oswald, Literata, Playfair.
+   LAYOUT: logo + search, intro line, index (authors/titles, А–Я, A–Z, 0–9, genres, tags), one shelf per letter; book page via #book-id. */
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0f0f10);--ink:light-dark(#111,#f2f0ec);--mute:light-dark(#77746f,#9a968f);
+--line:light-dark(#e4e1dc,#2a2a2c);--chip:light-dark(#f3f1ee,#1c1c1e);--k:1}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Onest,system-ui,sans-serif;overflow-x:clip}
+button,input,textarea{font:inherit;color:inherit}button{cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.wrap{max-width:1320px;margin:0 auto;padding:0 max(4vw,16px)}
+header .wrap{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 28px;padding-top:28px;padding-bottom:22px;border-bottom:1.5px solid var(--ink)}
+.logo{font:800 clamp(34px,5.4vw,52px)/1 Onest,sans-serif;letter-spacing:-.045em;margin:0;cursor:pointer;background:none;border:0;padding:0}
+.logo sup{font-size:.28em;letter-spacing:0;vertical-align:top;margin-left:2px}
+.acts{display:flex;gap:10px;flex:1 1 340px;justify-content:flex-end;flex-wrap:wrap}
+.search{flex:1 1 220px;max-width:380px;height:44px;border:1.5px solid var(--ink);border-radius:0;padding:0 14px;background:var(--bg);font-size:16px}
+.btn{height:44px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);padding:0 18px;font-weight:600;white-space:nowrap;border-radius:0}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.danger{background:transparent;color:#c62b1e;border-color:#c62b1e}
+.intro{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;padding-top:26px;padding-bottom:8px}
+.intro p{margin:0;font-size:clamp(17px,2vw,21px);font-weight:600;max-width:60ch;line-height:1.35}
+.count{font-size:13px;letter-spacing:.04em;color:var(--mute);white-space:nowrap}
+.idx{background:var(--bg)}
+.idx .wrap{padding-top:12px;padding-bottom:12px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.r{display:flex;align-items:center;gap:10px}
+.r>span{flex:none;width:58px;font-size:12px;color:var(--mute)}
+.r>div{display:flex;flex-wrap:wrap;gap:2px}
+.seg button{border:1.5px solid var(--ink);background:transparent;height:34px;padding:0 14px;font-weight:600;font-size:14px;border-radius:0}
+.seg button+button{border-left:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.L{width:30px;height:32px;border:0;background:transparent;font-weight:600;font-size:15px;border-radius:0;padding:0}
+.L:disabled{opacity:.22;cursor:default}
+.L[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.chip{border:1px solid var(--line);background:transparent;padding:4px 11px;font-size:14px;min-height:32px;border-radius:0}
+.chip small{color:var(--mute);margin-left:4px}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed=true] small{color:inherit;opacity:.6}
+.more{border:0;background:none;color:var(--mute);font-size:13px;text-decoration:underline;min-height:32px}
+main{padding-bottom:72px}
+.shelf{display:flex;flex-wrap:wrap;align-items:flex-end;margin-top:26px;--row:calc(424px*var(--k));background:repeating-linear-gradient(to bottom,transparent 0 calc(var(--row) - 2px),var(--ink) calc(var(--row) - 2px) var(--row))}
+.slot{position:relative;height:var(--row);display:flex;align-items:flex-end;padding:0 1.5px 2px}
+.dv{height:var(--row);display:flex;align-items:flex-end;padding:0 10px 2px 14px}
+.dv b{display:flex;align-items:flex-start;justify-content:center;padding-top:8px;width:30px;height:calc(150px*var(--k));border:1.5px solid var(--ink);border-bottom:0;font:800 17px Onest,sans-serif;background:var(--bg)}
+.sp{flex:none;position:relative;height:calc(var(--h)*var(--k));width:calc(var(--w)*var(--k));border:0;padding:0;background:var(--c);color:var(--t);overflow:hidden;transition:transform .3s cubic-bezier(.2,.7,.2,1),opacity .3s;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),inset 3px 0 6px -3px rgba(0,0,0,.35)}
+.sp .in{writing-mode:vertical-rl;display:flex;align-items:center;justify-content:space-between;gap:10px;height:100%;width:100%;padding:14px 0}
+.sp .ti{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:start;font-size:max(9px,min(calc(var(--w)*var(--k)*.42),26px));line-height:1}
+.sp .au{flex:none;font:600 max(7px,min(calc(var(--w)*var(--k)*.2),13px))/1 Onest,sans-serif;max-height:42%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;opacity:.85}
+.f0 .ti{font-family:Onest;font-weight:800;text-transform:uppercase}
+.f1 .ti{font-family:Oswald;font-weight:700;text-transform:uppercase}
+.f2 .ti{font-family:Literata;font-style:italic;font-weight:500}
+.f3 .ti{font-family:"Playfair Display";font-weight:700}
+.f4 .ti{font-family:Onest;font-weight:400;text-transform:uppercase;letter-spacing:.22em;font-size:max(8px,min(calc(var(--w)*var(--k)*.32),20px))}
+.pop{position:absolute;z-index:4;bottom:2px;left:50%;width:calc(300px*var(--k)*.68);pointer-events:none;opacity:0;transform:translate(-50%,0) scale(.35);transform-origin:50% 100%;transition:transform .32s cubic-bezier(.2,.8,.2,1),opacity .2s}
+.slot.l .pop{left:0;transform:translate(0,0) scale(.35);transform-origin:0 100%}
+.slot.r .pop{left:auto;right:0;transform:translate(0,0) scale(.35);transform-origin:100% 100%}
+.pop .bk-cv{--h:300px;box-shadow:0 2px 4px rgba(0,0,0,.2),0 24px 40px -18px rgba(0,0,0,.6)}
+.pop p{margin:0;padding:8px 2px 0;font-size:13px;line-height:1.3;background:var(--bg);position:absolute;top:100%;left:0;right:0}
+.pop p b{display:block;font-size:14px}
+.slot:hover .pop,.slot.open .pop{opacity:1;transform:translate(-50%,-10px) scale(1)}
+.slot.l:hover .pop,.slot.l.open .pop,.slot.r:hover .pop,.slot.r.open .pop{transform:translate(0,-10px) scale(1)}
+.slot:hover .sp,.slot.open .sp{opacity:0}
+.cvr img,.bk-cv img{width:100%;height:100%;object-fit:cover;display:block}
+.gen{container-type:inline-size;width:100%;height:100%;padding:14% 12%;display:flex;flex-direction:column;justify-content:space-between;background:var(--c);color:var(--t);text-align:left}
+.gen b{font:800 clamp(14px,12cqw,46px)/1.05 Onest,sans-serif;letter-spacing:-.02em;overflow-wrap:break-word;hyphens:auto}
+.gen i{font-style:normal;font-size:13px;opacity:.8}
+.empty{text-align:center;padding:90px 16px;color:var(--mute);max-width:540px;margin:0 auto}
+.empty h3{font:800 28px/1.1 Onest,sans-serif;letter-spacing:-.03em;color:var(--ink);margin:0 0 10px}
+.bk{padding-top:22px}
+.bk-nav{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:14px;flex-wrap:wrap}
+.lnk{border:0;background:none;padding:8px 0;font-weight:600;min-height:44px}
+.bk-g{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:clamp(24px,5vw,72px);padding-top:32px}
+.bk-cv{aspect-ratio:2/3;box-shadow:0 2px 4px rgba(0,0,0,.15),0 30px 50px -28px rgba(0,0,0,.55);overflow:hidden;--h:460px}
+.eyebrow{font-size:14px;color:var(--mute);margin:0 0 10px}
+.bk h1{font:800 clamp(34px,5vw,52px)/1.02 Onest,sans-serif;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.by{font-size:20px;margin:10px 0 24px}
+.desc{font-size:17px;max-width:62ch}
+.meta{display:grid;grid-template-columns:max-content 1fr;gap:6px 22px;margin:26px 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);font-size:15px}
+.meta dt{color:var(--mute)}.meta dd{margin:0}
+.cl{display:flex;flex-wrap:wrap;gap:6px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.ov{position:fixed;inset:0;z-index:20;background:rgba(10,10,10,.5);display:flex;align-items:center;justify-content:center;padding:16px}
+.ov[hidden]{display:none}
+.sheet{background:var(--bg);width:min(780px,100%);max-height:calc(100vh - 32px);overflow:auto;padding:clamp(18px,3vw,32px);position:relative;border:1.5px solid var(--ink)}
+.x{position:absolute;top:8px;right:8px;width:44px;height:44px;border:0;background:none;font-size:26px;line-height:1}
+.sheet h3{font:800 28px/1.1 Onest,sans-serif;letter-spacing:-.03em;margin:0 44px 14px 0}
+form.ed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+form.ed label,.lab{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--mute)}
+form.ed .full{grid-column:1/-1}
+form.ed input,form.ed textarea,.lab input{font-size:16px;border:1.5px solid var(--line);padding:10px 12px;background:var(--bg);min-height:44px;border-radius:0;color:var(--ink)}
+form.ed textarea{min-height:110px;resize:vertical}
+.cvrow{display:flex;gap:16px;align-items:center}
+.cvrow .bk-cv{width:84px;flex:none;--h:126px}
+.pick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:16px}
+.pick button{border:1.5px solid var(--ink);background:var(--bg);padding:20px;text-align:left;min-height:120px;border-radius:0}
+.pick b{display:block;font:800 20px Onest,sans-serif;margin-bottom:4px}
+.pick span{color:var(--mute);font-size:14px}
+.rev{list-style:none;padding:0;margin:14px 0}
+.rev li{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.rev input{width:22px;height:22px;margin-top:3px;flex:none}
+.rev small{color:var(--mute)}
+.warn{color:#c62b1e}.note{font-size:14px;color:var(--mute)}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:s .8s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes s{to{transform:rotate(1turn)}}
+@media(prefers-reduced-motion:reduce){.sp,.pop,.spin{transition:none;animation:none}}
+@media(max-width:600px){:root{--k:.72}.r{flex-wrap:wrap;gap:2px}.r>span{width:100%}.r>div:not(.cl){flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none}.L{flex:none;width:30px}.cl{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none}.chip{flex:none}
+.bk-g{grid-template-columns:1fr}.bk-cv{max-width:260px}form.ed,.pick{grid-template-columns:1fr}.search{max-width:none}.acts{justify-content:stretch}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <button class="logo" id="home">Alina's books<sup>®</sup></button>
+  <div class="acts">
+    <input class="search" id="q" type="search" placeholder="Назва, автор, жанр…" aria-label="Пошук">
+    
+  </div>
+</div></header>
+<div id="shelves">
+  <div class="wrap intro"><p>Домашня бібліотека: усе, що стоїть у нас на полицях. Наведіть на корінець, щоб побачити обкладинку, натисніть, щоб відкрити книжку.</p><span class="count" id="stat">БІБЛІОТЕКА [—]</span></div>
+  <nav class="idx"><div class="wrap">
+    <div class="r"><span>Полиці</span><div class="seg" role="group" aria-label="Впорядкувати"><button id="mA" aria-pressed="true">За автором</button><button id="mT" aria-pressed="false">За назвою</button></div></div>
+    <div class="r"><span>Укр</span><div id="aUA"></div></div>
+    <div class="r"><span>Eng</span><div id="aEN"></div></div>
+    <div class="r"><span>0–9</span><div id="aNum"></div></div>
+    <div class="r"><span>Жанри</span><div id="gen" class="cl"></div></div>
+    <div class="r" id="tagRow"><span>Теги</span><div id="tags" class="cl"></div></div>
+  </div></nav>
+  <main class="wrap" id="main"></main>
+</div>
+<main class="wrap" id="book" hidden></main>
+<div class="ov" id="ov" hidden><div class="sheet" role="dialog" aria-modal="true"><button class="x" id="x" aria-label="Закрити">×</button><div id="sh"></div></div></div>
+<input type="file" id="ph" accept="image/*" hidden>
+<input type="file" id="cvf" accept="image/*" hidden>
+<datalist id="gl"></datalist>
+<script>
+{
+const UA="АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЮЯ".split(""),EN="ABCDEFGHIJKLMNOPQRSTUVWXYZ".split(""),NUM="0123456789".split("");
+const PAL=["#d7261e","#f07c1b","#141414","#efe9dc","#8fd1c4","#f2b8c6","#1f6b4a","#2b59c3","#b8953a","#9a9a96","#fafafa","#6b2d5c","#e8d44d","#3a3a3a","#c9dff2"];
+const GENRES=["роман","класика","фентезі","фантастика","детектив","трилер","історичне","поезія","нон-фікшн","біографія","бізнес","психологія","наука","філософія","мистецтво й дизайн","дитяче","підліткове","комікси","кулінарія","подорожі"];
+const coll=new Intl.Collator("uk",{sensitivity:"base",numeric:true});
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hoverNone=matchMedia("(hover: none)").matches;
+let books=[],loaded=false,mode="author",letter=null,q="",genre=null,sel=new Set(),allTags=false,view=null,shelfScroll=0;
+let db=null,assets=null,sample=null,canWrite=false,canImg=false;
+let draft=null,pendingCover=null,pendingColor=null,found=[];
+
+const surname=a=>{a=(a||"").trim();if(!a)return "";if(a.includes(","))return a.split(",")[0].trim();const p=a.split(/\s+/);return p[p.length-1]};
+const firstAuthor=a=>(a||"").split(/\s+(?:і|та|and|&)\s+|;/)[0].trim();
+const keyA=b=>surname(firstAuthor(b.author))||"—";
+const letterOf=s=>{const c=(s||"").trim().replace(/^[«"'„(\[]+/,"").charAt(0).toLocaleUpperCase("uk");return UA.includes(c)||EN.includes(c)||NUM.includes(c)?c:"#"};
+const bLetter=b=>mode==="author"?letterOf(keyA(b)):letterOf(b.title);
+const hash=s=>{let h=7;for(const c of s||"")h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)};
+const nb=n=>{const m=n%10,c=n%100;return n+" "+(m===1&&c!==11?"книжка":m>=2&&m<=4&&(c<12||c>14)?"книжки":"книжок")};
+const lum=hex=>{const n=parseInt(hex.slice(1),16);const r=n>>16&255,g=n>>8&255,b=n&255;return (0.299*r+0.587*g+0.114*b)/255};
+const colOf=b=>/^#[0-9a-f]{6}$/i.test(b.color||"")?b.color:PAL[hash(b.title+b.author)%PAL.length];
+const txtOf=c=>lum(c)>0.6?"#141414":"#fafafa";
+/* Пропорції полиці: 1 см = 12 px для висоти й товщини однаково.
+   Товщина корінця (мм) = сторінки × 0,06 мм + 3 мм на обкладинку. Висота = реальна висота книжки в см.
+   Якщо даних немає: 300 сторінок; висота 29 см для артбуків і 21 см для решти. */
+const PX=12;
+const dims=b=>{const p=+b.pages>0?+b.pages:300,hc=+b.heightCm>0?+b.heightCm:(b.genre==="артбук"?29:21);
+  return {h:Math.round(Math.min(34,Math.max(12,hc))*PX),w:Math.round(Math.max(12,(p*0.06+3)*PX/10))}};
+const vars=b=>{const c=colOf(b),d=dims(b);return `--c:${c};--t:${txtOf(c)};--h:${d.h}px;--w:${d.w}px`};
+
+function coverHTML(b){
+  if(b.cover)return `<img src="${esc(b.cover)}" alt="Обкладинка: ${esc(b.title)}" loading="lazy">`;
+  return `<div class="gen"><b>${esc(b.title)}</b><i>${esc(b.author)}</i></div>`;
+}
+function spine(b){
+  return `<div class="slot"><button class="sp f${hash(b.author+b.title)%5}" style="${vars(b)}" data-id="${esc(b.id)}" aria-label="${esc(b.title)}, ${esc(b.author)}">
+  <span class="in"><span class="ti">${esc(b.title)}</span><span class="au">${esc(surname(firstAuthor(b.author)))}</span></span></button>
+  <div class="pop" aria-hidden="true"><div class="bk-cv" style="${vars(b)}">${coverHTML(b)}</div><p><b>${esc(b.title)}</b>${esc(b.author)}${b.year?", "+esc(b.year):""}</p></div></div>`;
+}
+function matches(b,skipGenre){
+  if(q){const h=[b.title,b.author,b.genre,b.description,(b.tags||[]).join(" ")].join(" ").toLocaleLowerCase("uk");if(!q.split(/\s+/).every(w=>h.includes(w)))return false}
+  if(!skipGenre&&genre&&b.genre!==genre)return false;
+  for(const t of sel)if(!(b.tags||[]).includes(t))return false;
+  return true;
+}
+const sorted=list=>list.sort(mode==="author"?(a,b)=>coll.compare(keyA(a),keyA(b))||coll.compare(a.author||"",b.author||"")||coll.compare(a.title,b.title):(a,b)=>coll.compare(a.title,b.title));
+
+function renderShelves(){
+  const base=books.filter(b=>matches(b));
+  const have=new Set(base.map(bLetter));
+  if(letter&&!have.has(letter))letter=null;
+  const row=ls=>ls.map(l=>`<button class="L" data-l="${l}" aria-pressed="${l===letter}" ${have.has(l)?"":"disabled"}>${l}</button>`).join("");
+  $("#aUA").innerHTML=row(UA);$("#aEN").innerHTML=row(EN);$("#aNum").innerHTML=row(NUM)+(have.has("#")?row(["#"]):"");
+  const gc={};books.filter(b=>matches(b,true)).forEach(b=>{if(b.genre)gc[b.genre]=(gc[b.genre]||0)+1});
+  const gs=Object.keys(gc).sort((a,b)=>gc[b]-gc[a]||coll.compare(a,b));
+  if(genre&&!gs.includes(genre))gs.unshift(genre);
+  $("#gen").innerHTML=`<button class="chip" data-g="" aria-pressed="${!genre}">Усі</button>`+gs.map(g=>`<button class="chip" data-g="${esc(g)}" aria-pressed="${g===genre}">${esc(g)}<small>${gc[g]||0}</small></button>`).join("")+(gs.length?"":`<span class="note" style="align-self:center">з'являться з першими книжками</span>`);
+  const tc={};books.forEach(b=>(b.tags||[]).forEach(t=>tc[t]=(tc[t]||0)+1));
+  const tl=Object.keys(tc).sort((a,b)=>tc[b]-tc[a]||coll.compare(a,b));
+  const shown=allTags?tl:tl.filter((t,i)=>i<14||sel.has(t));
+  $("#tagRow").hidden=!tl.length;
+  $("#tags").innerHTML=shown.map(t=>`<button class="chip" data-t="${esc(t)}" aria-pressed="${sel.has(t)}">${esc(t)}<small>${tc[t]}</small></button>`).join("")+(tl.length>14?`<button class="more" id="moreT">${allTags?"менше":"усі теги ("+tl.length+")"}</button>`:"");
+  $("#stat").textContent=`БІБЛІОТЕКА [${String(books.length).padStart(2,"0")}]`;
+  $("#gl").innerHTML=[...new Set([...GENRES,...books.map(b=>b.genre).filter(Boolean)])].map(g=>`<option value="${esc(g)}">`).join("");
+  const m=$("#main");
+  if(!loaded){m.innerHTML=`<div class="empty"><span class="spin"></span>Відкриваю полиці…</div>`;return}
+  if(!books.length){m.innerHTML=`<div class="empty"><h3>Полиці поки порожні</h3><p>${canWrite?"Натисніть «Додати книжку» і сфотографуйте обкладинку або цілу полицю. Claude розпізнає назви, авторів і жанр, напише опис і підбере теги.":"Тут з'являться книжки, щойно їх додадуть."}</p></div>`;return}
+  const list=sorted(base.filter(b=>!letter||bLetter(b)===letter));
+  if(!list.length){m.innerHTML=`<div class="empty"><h3>Нічого не знайшлося</h3><p>Спробуйте інше слово або зніміть фільтри.</p></div>`;return}
+  let last=null,out="";
+  list.forEach(b=>{const k=bLetter(b);if(k!==last){out+=`<div class="dv" aria-hidden="true"><b>${esc(k)}</b></div>`;last=k}out+=spine(b)});
+  m.innerHTML=`<div class="shelf">${out}</div>`;
+}
+function renderBook(){
+  const b=books.find(x=>x.id===view),el=$("#book");
+  if(!b){el.innerHTML=loaded?`<div class="empty"><h3>Книжку не знайдено</h3><p><button class="btn ghost" data-back>До полиць</button></p></div>`:`<div class="empty"><span class="spin"></span>Відкриваю…</div>`;return}
+  const all=sorted(books.slice()),i=all.indexOf(b),prev=all[i-1],next=all[i+1];
+  const meta=[["Жанр",b.genre],["Рік",b.year],["Сторінок",b.pages],["Висота",b.heightCm?b.heightCm+" см":""],["Мова",b.lang],["Де стоїть",b.shelf]].filter(r=>r[1]);
+  el.innerHTML=`<article class="bk"><div class="bk-nav"><button class="lnk" data-back>← Усі книжки</button><span>${prev?`<button class="lnk" data-open="${esc(prev.id)}">← ${esc(prev.title)}</button>`:""}${prev&&next?" &nbsp;·&nbsp; ":""}${next?`<button class="lnk" data-open="${esc(next.id)}">${esc(next.title)} →</button>`:""}</span></div>
+  <div class="bk-g"><div class="bk-cv" style="${vars(b)};--h:600px;--k:1">${coverHTML(b)}</div><div>
+  ${b.genre?`<p class="eyebrow">${esc(b.genre)}</p>`:""}<h1>${esc(b.title)}</h1><p class="by">${esc(b.author||"Автор невідомий")}</p>
+  <p class="desc">${esc(b.description||"Опису поки немає.")}</p>
+  ${meta.length?`<dl class="meta">${meta.map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:""}
+  ${(b.tags||[]).length?`<div class="cl">${b.tags.map(t=>`<button class="chip" data-go="${esc(t)}">${esc(t)}</button>`).join("")}</div>`:""}
+  ${canWrite?`<div class="btns"><button class="btn ghost" data-edit="${esc(b.id)}">Редагувати</button><button class="btn danger" data-del="${esc(b.id)}">Видалити</button></div>`:""}
+  </div></div></article>`;
+}
+function render(){
+  $("#shelves").hidden=!!view;$("#book").hidden=!view;
+  if(view)renderBook();else renderShelves();
+}
+function route(){
+  const h=decodeURIComponent(location.hash.slice(1));const nv=h.startsWith("book-")?h.slice(5):null;
+  if(nv&&!view)shelfScroll=scrollY;
+  const back=!nv&&view;view=nv;render();
+  if(nv)scrollTo(0,0);else if(back)scrollTo(0,shelfScroll);
+}
+const openBook=id=>{location.hash="book-"+id};
+
+function open(html){$("#sh").innerHTML=html;$("#ov").hidden=false;document.body.style.overflow="hidden"}
+function close(){$("#ov").hidden=true;document.body.style.overflow="";draft=null;pendingCover=null;pendingColor=null;found=[]}
+function showEdit(b){
+  draft={...b};
+  open(`<h3>${b.id?"Редагувати книжку":"Нова книжка"}</h3>
+  <form class="ed" id="ef">
+    <label class="full">Назва<input id="f_title" required value="${esc(b.title)}"></label>
+    <label class="full">Автор<input id="f_author" value="${esc(b.author)}" placeholder="Ім'я Прізвище"></label>
+    <label>Жанр<input id="f_genre" list="gl" value="${esc(b.genre)}" placeholder="роман"></label>
+    <label>Рік<input id="f_year" inputmode="numeric" value="${esc(b.year)}"></label>
+    <label>Сторінок<input id="f_pages" inputmode="numeric" value="${esc(b.pages)}" placeholder="300"></label>
+    <label>Висота, см<input id="f_hcm" inputmode="decimal" value="${esc(b.heightCm)}" placeholder="21"></label>
+    <label>Мова<input id="f_lang" value="${esc(b.lang)}" placeholder="укр"></label>
+    <label>Де стоїть<input id="f_shelf" value="${esc(b.shelf)}" placeholder="Вітальня, шафа 2"></label>
+    <label class="full">Теги, через кому<input id="f_tags" value="${esc((b.tags||[]).join(", "))}" placeholder="про кохання, війна, подарунок"></label>
+    <label class="full">Короткий опис<textarea id="f_desc">${esc(b.description)}</textarea></label>
+    ${assets?`<div class="full cvrow"><div class="bk-cv" id="cvp" style="${vars(b)}">${coverHTML(b)}</div><div><button type="button" class="btn ghost" id="cvb">${b.cover||pendingCover?"Замінити обкладинку":"Додати фото обкладинки"}</button><p class="note">Колір корінця підбереться з обкладинки.</p></div></div>`:""}
+    <div class="full btns"><button class="btn" type="submit" id="sv">Зберегти</button><button class="btn ghost" type="button" data-close>Скасувати</button></div>
+    <p class="full warn" id="err" hidden></p>
+  </form>`);
+  if(pendingCover)previewCover();
+}
+function previewCover(){const p=$("#cvp");if(p)p.innerHTML=`<img src="${URL.createObjectURL(pendingCover)}" alt="">`}
+function showAdd(){
+  open(`<h3>Додати книжку</h3><p class="note">Найшвидше за фото: обкладинка однієї книжки або корінці цілої полиці.</p>
+  <div class="pick">${canImg?`<button id="byPhoto"><b>За фото</b><span>Claude розпізнає назву, автора й жанр, напише опис і теги</span></button>`:""}
+  <button id="byHand"><b>Вручну</b><span>Ввести все самому</span></button></div>`);
+}
+async function shrink(file,max){
+  const bmp=await createImageBitmap(file);const k=Math.min(1,max/Math.max(bmp.width,bmp.height));
+  const c=document.createElement("canvas");c.width=Math.round(bmp.width*k);c.height=Math.round(bmp.height*k);
+  c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+  const s=document.createElement("canvas");s.width=s.height=1;const sx=s.getContext("2d");sx.drawImage(c,0,0,1,1);
+  const d=sx.getImageData(0,0,1,1).data;pendingColor="#"+[d[0],d[1],d[2]].map(v=>v.toString(16).padStart(2,"0")).join("");
+  return new Promise(r=>c.toBlob(r,"image/jpeg",.86));
+}
+async function recognize(file){
+  open(`<p><span class="spin"></span>Claude роздивляється фото…</p>`);
+  try{
+    const shot=await shrink(file,1600);
+    const known=[...new Set(books.flatMap(b=>b.tags||[]))].slice(0,80).join(", ");
+    const kg=[...new Set([...GENRES,...books.map(b=>b.genre).filter(Boolean)])].join(", ");
+    const prompt=`Ти бібліотекар домашньої бібліотеки. На фото обкладинка однієї книжки або полиця з корінцями. Визнач кожну книжку, яку можна прочитати.
+Поверни ЛИШЕ JSON: {"kind":"cover"|"shelf","books":[{"title":"","author":"Ім'я Прізвище","genre":"","year":число або null,"pages":число,"heightCm":число,"lang":"укр|англ|…","tags":["…"],"description":"","unsure":false}]}
+Правила: назва й автор як на книжці (мовою видання). genre: один жанр з цього списку: ${kg}. Інший жанр бери лише якщо жоден не підходить. description: 2–3 речення українською про що книжка, без спойлерів. tags: 3–5 коротких тегів українською малими літерами (тема, настрій, для кого), без повтору жанру. Якщо підходять, бери вже наявні теги: ${known||"(поки немає)"}. Якщо не впевнений у назві чи авторі, став "unsure":true. pages і heightCm: кількість сторінок і висота книжки в см для цього видання; якщо точно не знаєш, оціни за типовим виданням і за пропорціями на фото. Нічого іншого не вигадуй.`;
+    const res=await sample.json(prompt,{images:[shot],modelTier:"default"});
+    found=(res&&Array.isArray(res.books)?res.books:[]).filter(b=>b&&b.title).map(b=>({title:String(b.title),author:String(b.author||""),genre:String(b.genre||"").toLowerCase(),year:b.year||"",pages:b.pages||"",heightCm:b.heightCm||"",lang:b.lang||"",tags:Array.isArray(b.tags)?b.tags.map(t=>String(t).toLowerCase()):[],description:String(b.description||""),unsure:!!b.unsure}));
+    if(!found.length){open(`<p>Не вдалося прочитати жодної назви. Спробуйте фото ближче, без відблисків.</p><div class="btns"><button class="btn" id="byPhoto">Інше фото</button><button class="btn ghost" id="byHand">Ввести вручну</button></div>`);return}
+    if(found.length===1&&res.kind!=="shelf"){pendingCover=await shrink(file,900);showEdit(found[0]);return}
+    pendingColor=null;
+    if(found.length===1){showEdit(found[0]);return}
+    open(`<h3>Знайдено ${nb(found.length)}</h3><p class="note">Зніміть позначку з зайвих. Обкладинки можна додати потім через «Редагувати».</p>
+    <label class="lab" style="margin-top:12px">Де стоїть ця полиця<input id="r_shelf" placeholder="Вітальня, шафа 2"></label>
+    <ul class="rev">${found.map((b,i)=>`<li><input type="checkbox" checked data-i="${i}" id="r${i}" aria-label="${esc(b.title)}"><label for="r${i}"><b>${esc(b.title)}</b> — ${esc(b.author)}${b.unsure?` <small class="warn">· перевірте</small>`:""}<br><small>${esc([b.genre,...b.tags].filter(Boolean).join(" · "))}</small></label></li>`).join("")}</ul>
+    <div class="btns"><button class="btn" id="saveAll">Додати вибрані</button><button class="btn ghost" data-close>Скасувати</button></div><p class="warn" id="err" hidden></p>`);
+  }catch(e){
+    open(`<p class="warn">Розпізнати не вдалося${e&&e.code==="rate_limited"?": забагато запитів, спробуйте за хвилину":""}.</p><div class="btns"><button class="btn" id="byPhoto">Спробувати ще</button><button class="btn ghost" id="byHand">Ввести вручну</button></div>`);
+  }
+}
+function clean(d){
+  const y=parseInt(d.year,10),pg=parseInt(d.pages,10),hc=parseFloat(String(d.heightCm??"").replace(",","."));
+  return {title:d.title.trim(),author:(d.author||"").trim(),genre:(d.genre||"").trim().toLowerCase(),year:Number.isFinite(y)?y:null,pages:pg>0?pg:null,heightCm:hc>0?Math.round(hc*10)/10:null,lang:(d.lang||"").trim(),shelf:(d.shelf||"").trim(),
+    tags:[...new Set((d.tags||[]).map(t=>t.trim().toLowerCase()).filter(Boolean))],description:(d.description||"").trim(),cover:d.cover||null,color:d.color||null,addedAt:d.addedAt||new Date().toISOString()};
+}
+async function saveEdit(){
+  const v=id=>$("#"+id).value;
+  const d={...draft,title:v("f_title"),author:v("f_author"),genre:v("f_genre"),year:v("f_year"),pages:v("f_pages"),heightCm:v("f_hcm"),lang:v("f_lang"),shelf:v("f_shelf"),tags:v("f_tags").split(","),description:v("f_desc")};
+  if(!d.title.trim())return;
+  delete d.id;delete d.unsure;
+  $("#sv").disabled=true;$("#sv").innerHTML=`<span class="spin"></span>Зберігаю`;
+  try{
+    if(pendingCover&&assets){const up=await assets.upload(pendingCover);if(draft.cover){try{await assets.delete(draft.cover)}catch(e){}}d.cover=up.id;d.color=pendingColor}
+    const ref=draft.id?db.collection("books").doc(draft.id):db.collection("books").doc();
+    await ref.set(clean(d));close();
+  }catch(e){$("#err").hidden=false;$("#err").textContent=e&&e.code==="quota_exceeded"?"Місце в каталозі закінчилося.":"Не вдалося зберегти. Спробуйте ще раз.";$("#sv").disabled=false;$("#sv").textContent="Зберегти"}
+}
+async function saveAll(){
+  const shelf=$("#r_shelf").value;const pick=[...document.querySelectorAll(".rev input:checked")].map(x=>found[+x.dataset.i]);
+  if(!pick.length)return;const btn=$("#saveAll");btn.disabled=true;
+  try{for(let i=0;i<pick.length;i++){btn.innerHTML=`<span class="spin"></span>${i+1} з ${pick.length}`;const {unsure,...p}=pick[i];await db.collection("books").doc().set(clean({...p,shelf}))}close()}
+  catch(e){$("#err").hidden=false;$("#err").textContent="Частину не вдалося зберегти. Спробуйте ще раз.";btn.disabled=false;btn.textContent="Додати вибрані"}
+}
+
+document.addEventListener("click",async e=>{
+  if(e.target===$("#ov")){close();return}
+  const t=e.target.closest("button");
+  if(!t){document.querySelectorAll(".slot.open").forEach(s=>s.classList.remove("open"));return}
+  if(t.id==="x"||t.hasAttribute("data-close"))return close();
+  if(t.id==="home"||t.hasAttribute("data-back")){close();location.hash="";return}
+  if(t.id==="mA"||t.id==="mT"){mode=t.id==="mA"?"author":"title";letter=null;$("#mA").setAttribute("aria-pressed",mode==="author");$("#mT").setAttribute("aria-pressed",mode==="title");render();return}
+  if(t.dataset.l){letter=letter===t.dataset.l?null:t.dataset.l;render();return}
+  if(t.dataset.g!==undefined){genre=t.dataset.g||null;letter=null;render();return}
+  if(t.dataset.t){const k=t.dataset.t;sel.has(k)?sel.delete(k):sel.add(k);render();return}
+  if(t.id==="moreT"){allTags=!allTags;render();return}
+  if(t.dataset.go){sel=new Set([t.dataset.go]);genre=null;letter=null;location.hash="";return}
+  if(t.classList.contains("sp")){
+    const s=t.parentElement;
+    if(hoverNone&&!s.dataset.armed){document.querySelectorAll(".slot.open").forEach(x=>{x.classList.remove("open");delete x.dataset.armed});edge(s);s.classList.add("open");s.dataset.armed="1";return}
+    openBook(t.dataset.id);return}
+  if(t.dataset.open){openBook(t.dataset.open);return}
+  if(t.dataset.edit){pendingCover=null;pendingColor=null;showEdit(books.find(b=>b.id===t.dataset.edit));return}
+  if(t.dataset.del){
+    if(t.dataset.sure!=="1"){t.dataset.sure="1";t.textContent="Точно видалити?";return}
+    const b=books.find(x=>x.id===t.dataset.del);t.disabled=true;
+    try{await db.collection("books").doc(b.id).delete();if(b.cover&&assets){try{await assets.delete(b.cover)}catch(_){}}location.hash=""}catch(_){t.textContent="Не вдалося"}
+    return}
+  if(t.id==="add")return showAdd();
+  if(t.id==="byPhoto"){$("#ph").value="";$("#ph").click();return}
+  if(t.id==="byHand"){pendingCover=null;pendingColor=null;showEdit({title:"",author:"",tags:[]});return}
+  if(t.id==="cvb"){$("#cvf").value="";$("#cvf").click();return}
+  if(t.id==="saveAll")return saveAll();
+});
+function edge(slot){
+  const r=slot.getBoundingClientRect(),pw=300*parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--k"))*.68/2;
+  slot.classList.toggle("l",r.left+r.width/2-pw<8);slot.classList.toggle("r",r.left+r.width/2+pw>innerWidth-8);
+}
+document.addEventListener("pointerover",e=>{const s=e.target.closest&&e.target.closest(".slot");if(s)edge(s)});
+document.addEventListener("focusin",e=>{const s=e.target.closest&&e.target.closest(".slot");if(s){edge(s);document.querySelectorAll(".slot.open").forEach(x=>x!==s&&x.classList.remove("open"));s.classList.add("open")}});
+document.addEventListener("focusout",e=>{const s=e.target.closest&&e.target.closest(".slot");if(s&&!hoverNone)s.classList.remove("open")});
+document.addEventListener("submit",e=>{if(e.target.id==="ef"){e.preventDefault();saveEdit()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#ov").hidden)close()});
+$("#ph").addEventListener("change",e=>{const f=e.target.files[0];if(f)recognize(f)});
+$("#cvf").addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;pendingCover=await shrink(f,900);previewCover();const b=$("#cvb");if(b)b.textContent="Замінити обкладинку"});
+let tm;$("#q").addEventListener("input",e=>{clearTimeout(tm);tm=setTimeout(()=>{q=e.target.value.trim().toLocaleLowerCase("uk");letter=null;if(view)location.hash="";else render()},150)});
+addEventListener("hashchange",route);
+
+route();
+(async()=>{
+  try{const r=await fetch("data/books.json",{cache:"no-cache"});const list=await r.json();books=list.map((b,i)=>({id:b.id||String(i),...b}))}catch(e){books=[]}
+  loaded=true;render();
+})();
+}
+</script>
+</body>
+</html>

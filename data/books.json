@@ -1,0 +1,419 @@
+[
+ {
+  "id": "1001-movies",
+  "cover": null,
+  "color": null,
+  "author": "Steven Jay Schneider",
+  "description": "Добірка 1001 фільму, які варто побачити: від німого кіно до сучасності, з коротким описом і контекстом до кожного.",
+  "genre": "кіно",
+  "heightCm": 24,
+  "lang": "англ",
+  "pages": 960,
+  "shelf": "",
+  "tags": [
+   "кіноманам",
+   "добірка",
+   "довідник"
+  ],
+  "title": "1001 Movies You Must See Before You Die",
+  "year": null
+ },
+ {
+  "id": "animated-storytelling",
+  "cover": "covers/animated-storytelling.jpg",
+  "color": "#c36d6c",
+  "author": "Liz Blazer",
+  "description": "Практичний посібник про те, як вибудувати історію в анімації та моушн-графіці: від ідеї й сценарію до раскадровки й фінального ролика.",
+  "genre": "анімація",
+  "heightCm": 23,
+  "lang": "англ",
+  "pages": 224,
+  "shelf": "",
+  "tags": [
+   "сторітелінг",
+   "моушн-дизайн",
+   "практика"
+  ],
+  "title": "Animated Storytelling",
+  "year": null
+ },
+ {
+  "id": "arkein",
+  "cover": "covers/arkein.jpg",
+  "color": "#e370c4",
+  "author": "Елізабет Вінчентеллі",
+  "description": "Артбук про створення анімаційного серіалу «Аркейн» за світом League of Legends: концепт-арт, персонажі й робота студії Fortiche.",
+  "genre": "артбук",
+  "heightCm": 31,
+  "lang": "укр",
+  "pages": 224,
+  "shelf": "",
+  "tags": [
+   "мистецтво серіалу",
+   "league of legends",
+   "анімація"
+  ],
+  "title": "Аркейн. Мистецтво й створення серіалу",
+  "year": 2025
+ },
+ {
+  "id": "art-of-mitchells-vs-machines",
+  "cover": "covers/art-of-mitchells-vs-machines.jpg",
+  "color": "#ad927b",
+  "author": "Ramin Zahed",
+  "description": "Артбук до мультфільму «Мітчелли проти машин»: концепти персонажів, стилістика й робота команди Sony Pictures Animation.",
+  "genre": "артбук",
+  "heightCm": 25,
+  "lang": "англ",
+  "pages": 176,
+  "shelf": "",
+  "tags": [
+   "мистецтво фільму",
+   "анімація",
+   "sony pictures animation"
+  ],
+  "title": "The Art of The Mitchells vs. The Machines",
+  "year": null
+ },
+ {
+  "id": "aziiskyi-kinematohraf",
+  "cover": "covers/aziiskyi-kinematohraf.jpg",
+  "color": "#a79b9a",
+  "author": "Антон Козлов",
+  "description": "Огляд кіно Японії, Китаю, Кореї та інших країн Азії: ключові режисери, фільми й течії, які вплинули на світовий кінематограф.",
+  "genre": "кіно",
+  "heightCm": 20,
+  "lang": "укр",
+  "pages": 576,
+  "shelf": "",
+  "tags": [
+   "азія",
+   "історія",
+   "режисери"
+  ],
+  "title": "Азійський кінематограф: від класики до «нової хвилі» (1950–1990)",
+  "year": 2026
+ },
+ {
+  "id": "colours-of-film",
+  "cover": "covers/colours-of-film.jpg",
+  "color": "#c58a83",
+  "author": "Charles Bramesco",
+  "description": "Історія кіно через колірні палітри: 50 фільмів і те, як режисери й оператори працюють з кольором, щоб розповідати історію.",
+  "genre": "кіно",
+  "heightCm": 24,
+  "lang": "англ",
+  "pages": 224,
+  "shelf": "",
+  "tags": [
+   "колір",
+   "кінематограф",
+   "візуальна мова"
+  ],
+  "title": "Colours of Film",
+  "year": null
+ },
+ {
+  "id": "harry-potter-rozkadruvannia",
+  "cover": "covers/harry-potter-rozkadruvannia.jpg",
+  "color": "#635d78",
+  "author": "Джоді Ревенсон",
+  "description": "Розкадровки й ескізи з фільмів про Гаррі Поттера: як ключові сцени виглядали на папері ще до зйомок.",
+  "genre": "артбук",
+  "heightCm": 30,
+  "lang": "укр",
+  "pages": 352,
+  "shelf": "",
+  "tags": [
+   "гаррі поттер",
+   "раскадровка",
+   "мистецтво фільму"
+  ],
+  "title": "Гаррі Поттер. Розкадрування",
+  "year": null
+ },
+ {
+  "id": "klaus",
+  "cover": "covers/klaus.jpg",
+  "color": "#dfdace",
+  "author": "Рамін Загед",
+  "description": "Артбук до мультфільму «Клаус»: як 2D-анімація отримала об'ємне світло, концепти персонажів і зимового містечка.",
+  "genre": "артбук",
+  "heightCm": 30,
+  "lang": "укр",
+  "pages": 192,
+  "shelf": "",
+  "tags": [
+   "мистецтво фільму",
+   "анімація",
+   "netflix"
+  ],
+  "title": "Клаус. Мистецтво фільму",
+  "year": null
+ },
+ {
+  "id": "liubov-smert-roboty",
+  "cover": "covers/liubov-smert-roboty.jpg",
+  "color": "#1c1b18",
+  "author": "Рамін Загед",
+  "description": "Артбук до анімаційної антології Netflix: концепт-арт, кадри і розповіді студій, які працювали над різними епізодами.",
+  "genre": "артбук",
+  "heightCm": 23,
+  "lang": "укр",
+  "pages": 248,
+  "shelf": "",
+  "tags": [
+   "мистецтво серіалу",
+   "анімація",
+   "netflix"
+  ],
+  "title": "Любов, смерть + роботи. Мистецтво серіалу",
+  "year": null
+ },
+ {
+  "id": "marvel-cinematic-universe-timeline",
+  "cover": "covers/marvel-cinematic-universe-timeline.jpg",
+  "color": "#795d4e",
+  "author": "Anthony Breznican",
+  "description": "Офіційна хронологія кіновсесвіту Marvel: події всіх фільмів і серіалів, розкладені в одну послідовну історію.",
+  "genre": "кіно",
+  "heightCm": 31,
+  "lang": "англ",
+  "pages": 320,
+  "shelf": "",
+  "tags": [
+   "marvel",
+   "кіновсесвіт",
+   "хронологія"
+  ],
+  "title": "The Marvel Cinematic Universe: An Official Timeline",
+  "year": null
+ },
+ {
+  "id": "mystetstvo-i-dusha-diuny",
+  "cover": "covers/mystetstvo-i-dusha-diuny.jpg",
+  "color": "#4d412d",
+  "author": "Таня Лапойнт",
+  "description": "Артбук про створення «Дюни» Дені Вільнева: концепт-арт, декорації, костюми й розмови з командою фільму.",
+  "genre": "артбук",
+  "heightCm": 26.5,
+  "lang": "укр",
+  "pages": 240,
+  "shelf": "",
+  "tags": [
+   "дюна",
+   "дені вільнев",
+   "мистецтво фільму"
+  ],
+  "title": "Мистецтво й душа «Дюни»",
+  "year": 2022
+ },
+ {
+  "id": "now-playing",
+  "cover": null,
+  "color": null,
+  "author": "Alexandre Clérisse",
+  "description": "Ілюстрована книжка-пошуківка для кіноманів: на кожному розвороті сховані відсилки до відомих фільмів, які треба знайти.",
+  "genre": "кіно",
+  "heightCm": 31,
+  "lang": "англ",
+  "pages": 32,
+  "shelf": "",
+  "tags": [
+   "віммельбух",
+   "кіноманам",
+   "ілюстрації"
+  ],
+  "title": "Now Playing: A Seek-and-Find Book for Film Buffs",
+  "year": null
+ },
+ {
+  "id": "podorozh-pysmennyka",
+  "cover": "covers/podorozh-pysmennyka.jpg",
+  "color": "#9b9595",
+  "author": "Крістофер Воглер",
+  "description": "Класичний посібник для сценаристів і письменників про структуру «подорожі героя» та архетипи, на яких тримаються сильні історії.",
+  "genre": "сторітелінг",
+  "heightCm": 23.5,
+  "lang": "укр",
+  "pages": 498,
+  "shelf": "",
+  "tags": [
+   "сценарна майстерність",
+   "подорож героя",
+   "практика"
+  ],
+  "title": "Подорож письменника",
+  "year": null
+ },
+ {
+  "id": "rezhysura-opovidi",
+  "cover": "covers/rezhysura-opovidi.jpg",
+  "color": "#574935",
+  "author": "Френсіс Ґлебас",
+  "description": "Книжка аніматора Disney про те, як розповідати історію через раскадровку, композицію кадру й постановку сцен.",
+  "genre": "сторітелінг",
+  "heightCm": 27,
+  "lang": "укр",
+  "pages": 348,
+  "shelf": "",
+  "tags": [
+   "раскадровка",
+   "анімація",
+   "практика"
+  ],
+  "title": "Режисура оповіді",
+  "year": null
+ },
+ {
+  "id": "rozmovy-z-kinorezhyseramy",
+  "cover": "covers/rozmovy-z-kinorezhyseramy.jpg",
+  "color": "#717372",
+  "author": "Йонас Мекас",
+  "description": "Збірка розмов Йонаса Мекаса з видатними режисерами про кіно, творчість і незалежне мистецтво.",
+  "genre": "кіно",
+  "heightCm": 30,
+  "lang": "укр",
+  "pages": 268,
+  "shelf": "",
+  "tags": [
+   "інтерв'ю",
+   "режисери",
+   "авторське кіно"
+  ],
+  "title": "Розмови з кінорежисерами",
+  "year": 2025
+ },
+ {
+  "id": "rumiko-takahashi-colors",
+  "cover": null,
+  "color": null,
+  "author": "Rumiko Takahashi",
+  "description": "Кольорові ілюстрації авторки «Ранми ½» та «Інуяші» за майже пів століття роботи.",
+  "genre": "артбук",
+  "heightCm": 30,
+  "lang": "англ",
+  "pages": 272,
+  "shelf": "",
+  "tags": [
+   "манга",
+   "ілюстрації",
+   "японія"
+  ],
+  "title": "The Art of Rumiko Takahashi: Colors 1978–2024",
+  "year": null
+ },
+ {
+  "id": "spider-man-into-the-spider-verse",
+  "cover": "covers/spider-man-into-the-spider-verse.jpg",
+  "color": "#57607f",
+  "author": "Рамін Загед",
+  "description": "Артбук про створення мультфільму «Людина-павук: Навколо всесвіту»: як народився його комікс-стиль, персонажі й світ.",
+  "genre": "артбук",
+  "heightCm": 28,
+  "lang": "укр",
+  "pages": 192,
+  "shelf": "",
+  "tags": [
+   "мистецтво фільму",
+   "marvel",
+   "анімація"
+  ],
+  "title": "Людина-павук: Навколо всесвіту. Мистецтво фільму",
+  "year": null
+ },
+ {
+  "id": "svitova-istoriia-animatsii-1",
+  "cover": "covers/svitova-istoriia-animatsii-1.jpg",
+  "color": "#c2b0b9",
+  "author": "Джанальберто Бендацці",
+  "description": "Перший том фундаментальної історії анімації від одного з головних дослідників жанру: від перших експериментів до становлення студій і національних шкіл.",
+  "genre": "анімація",
+  "heightCm": 23.5,
+  "lang": "укр",
+  "pages": 384,
+  "shelf": "",
+  "tags": [
+   "історія",
+   "анімація"
+  ],
+  "title": "Світова історія анімації. Том 1",
+  "year": null
+ },
+ {
+  "id": "the-disney-princess",
+  "cover": null,
+  "color": null,
+  "author": "Charles Solomon",
+  "description": "Історія диснеївських принцес від Білосніжки до сучасних героїнь: концепт-арт, ескізи і як змінювався їхній образ.",
+  "genre": "артбук",
+  "heightCm": 31,
+  "lang": "англ",
+  "pages": 304,
+  "shelf": "",
+  "tags": [
+   "disney",
+   "анімація",
+   "історія"
+  ],
+  "title": "The Disney Princess",
+  "year": null
+ },
+ {
+  "id": "ukrainskyi-kinoplakat-vufku",
+  "cover": "covers/ukrainskyi-kinoplakat-vufku.jpg",
+  "color": "#b78f39",
+  "author": "Станіслав Силантьєв, Дмитро Горбачов, Любомир Госейко",
+  "description": "Альбом кіноплакатів ВУФКУ 1920-х: авангардна графіка, художники й історія українського кінопромо тієї доби.",
+  "genre": "кіно",
+  "heightCm": 30.5,
+  "lang": "укр",
+  "pages": 168,
+  "shelf": "",
+  "tags": [
+   "українське кіно",
+   "плакат",
+   "1920-ті"
+  ],
+  "title": "Український кіноплакат 1920-х років. ВУФКУ",
+  "year": 2015
+ },
+ {
+  "id": "vufku-lost-found",
+  "cover": "covers/vufku-lost-found.jpg",
+  "color": "#9a9d99",
+  "author": "Станіслав Мензелевський",
+  "description": "Книжка про Всеукраїнське фотокіноуправління: втрачені й віднайдені фільми, людей і студію, з якої почалося українське кіно 1920-х.",
+  "genre": "кіно",
+  "heightCm": 24.5,
+  "lang": "укр",
+  "pages": 256,
+  "shelf": "",
+  "tags": [
+   "українське кіно",
+   "історія",
+   "1920-ті"
+  ],
+  "title": "ВУФКУ / VUFKU Lost & Found",
+  "year": 2019
+ },
+ {
+  "id": "witcher-3-guide",
+  "cover": null,
+  "color": null,
+  "author": "Prima Games",
+  "description": "Офіційний путівник по грі «Відьмак 3: Дикий Гін»: квести, карти, персонажі, спорядження й поради для проходження.",
+  "genre": "ігри",
+  "heightCm": 28,
+  "lang": "англ",
+  "pages": 688,
+  "shelf": "",
+  "tags": [
+   "відьмак",
+   "гайд",
+   "відеоігри"
+  ],
+  "title": "The Witcher 3: Wild Hunt. Official Game Guide",
+  "year": null
+ }
+]
