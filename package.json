@@ -1,0 +1,6 @@
+{
+  "name": "alinas-books",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" }
+}
